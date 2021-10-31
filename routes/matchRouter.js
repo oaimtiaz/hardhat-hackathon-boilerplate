@@ -41,23 +41,27 @@ router.post("/buy", async (req, res) => {
 });
 
 router.post("/sell", (req, res) => {
-  const senderAddress = req.body.sender;
-  const receiverAddress = req.body.receiver;
+  // Only difference from /buy endpoint is that the parameters should be switched
+  const senderPrivateKey = req.body.senderPrivate;
+  const senderPublicKey = req.body.senderPublic;
+  const receiverPublicKey = req.body.receiverPublic;
   const numTokens = req.body.numTokens;
   const tokenResult = minting.transferTokens(numTokens);
   const ethResult = minting.transferTokens(0.1);
   //Add message giving status update !!
-  res.json({ tokenResult: tokenResult, ethResult: ethResult });
-  out = matcher.addSellOrder(
-    req.body.walletId,
-    req.body.creatorId,
-    req.body.quantity,
-    req.body.price
+  const tokenResult = minting.transferTokens(
+    numTokens,
+    senderPrivateKey,
+    receiverPublicKey
   );
+  const ethResult = minting.transferEth(
+    0.1,
+    senderPrivateKey,
+    senderPublicKey,
+    receiverPublicKey
+  );
+  res.json({ tokenResult: tokenResult, ethResult: ethResult });
   res.send("ok");
 });
 
 module.exports = router;
-
-// console.log(functs);
-// functs.uploadImageAndMintNFT("./image2", "Image 2", 1);
