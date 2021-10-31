@@ -59,6 +59,6 @@ const uploadImageAndMintNFT = async (
   return `Information available at ${jsonUrl}`;
 };
 
-uploadImageAndMintNFT("./image2.png", "image2", 3);
+// uploadImageAndMintNFT("./image2.png", "image2", 3);
 
 module.exports.uploadImageAndMintNFT = uploadImageAndMintNFT;

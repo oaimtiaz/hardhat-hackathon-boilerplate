@@ -80,7 +80,7 @@ async function transferEth(
   let walletSigner = wallet.connect(provider);
 
   const currGasPriceHex = await provider.getGasPrice();
-  let currGasPrice = ethers.utils.hexlify(parseInt(currGasPriceHex));
+  let currGasPrice = ethers.utils.hexlify(parseInt(currGasPriceHex) + 10);
 
   const tx = {
     from: fromPublicKey,
@@ -96,7 +96,7 @@ async function transferEth(
     console.log("sending finished");
     return transaction;
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return null;
   }
 }

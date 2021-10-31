@@ -25,12 +25,12 @@ router.post("/buy", async (req, res) => {
   const senderPublicKey = req.body.senderPublic;
   const receiverPublicKey = req.body.receiverPublic;
   const numTokens = req.body.numTokens;
-  const tokenResult = minting.transferTokens(
+  const tokenResult = await minting.transferTokens(
     1,
     senderPrivateKey,
     receiverPublicKey
   );
-  const ethResult = minting.transferEth(
+  const ethResult = await minting.transferEth(
     0.1,
     senderPrivateKey,
     senderPublicKey,
@@ -41,26 +41,26 @@ router.post("/buy", async (req, res) => {
   //   res.json({ tokenResult: tokenResult, ethResult: ethResult });
 });
 
-router.post("/sell", (req, res) => {
+router.post("/sell", async (req, res) => {
   // Only difference from /buy endpoint is that the parameters should be switched
   const senderPrivateKey = req.body.senderPrivate;
   const senderPublicKey = req.body.senderPublic;
   const receiverPublicKey = req.body.receiverPublic;
   const numTokens = req.body.numTokens;
   //Add message giving status update !!
-  const tokenResult = minting.transferTokens(
-    numTokens,
+  const tokenResult = await minting.transferTokens(
+    1,
     senderPrivateKey,
     receiverPublicKey
   );
-  const ethResult = minting.transferEth(
+  const ethResult = await minting.transferEth(
     0.1,
     senderPrivateKey,
     senderPublicKey,
     receiverPublicKey
   );
   res.json({ tokenResult: tokenResult, ethResult: ethResult });
-  res.send("ok");
+  //   res.send("ok");
 });
 
 module.exports = router;
