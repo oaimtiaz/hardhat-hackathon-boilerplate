@@ -41,9 +41,6 @@ async function transferTokens(
   fromPrivateKey = PRIVATE_KEY,
   transferToPublicKey = PUBLIC_KEY_TO
 ) {
-  console.log(fromPrivateKey);
-  console.log(transferToPublicKey);
-  console.log(numTokens);
   let provider = ethers.getDefaultProvider("ropsten");
   let wallet = new ethers.Wallet(fromPrivateKey);
   let walletSigner = wallet.connect(provider);
@@ -80,14 +77,17 @@ async function transferEth(
   let walletSigner = wallet.connect(provider);
 
   const currGasPriceHex = await provider.getGasPrice();
-  let currGasPrice = ethers.utils.hexlify(parseInt(currGasPriceHex) + 10);
+  let currGasPrice = ethers.utils.hexlify(parseInt(currGasPriceHex));
 
+  // const txs = await provider.getTransactionCount(fromPublicKey, "latest");
+  // console.log(txs);
   const tx = {
     from: fromPublicKey,
     to: transferToPublicKey,
     value: ethers.utils.parseEther(`${amountEth}`),
-    nonce: provider.getTransactionCount(fromPublicKey, "latest"),
-    gasLimit: ethers.utils.hexlify(100000), // 100000
+    nonce:
+      2 * (await provider.getTransactionCount(fromPublicKey, "latest")) + 1,
+    gasLimit: ethers.utils.hexlify(7000000), // 100000
     gasPrice: currGasPrice,
   };
 
@@ -111,7 +111,7 @@ async function mintNFT(tokenURI, publicAccountKey = PUBLIC_KEY) {
   const tx = {
     from: publicAccountKey,
     to: contractAddress,
-    nonce: nonce,
+    nonce: 2 * nonce,
     gas: 1000000,
     data: nftContract.methods.mintNFT(publicAccountKey, tokenURI).encodeABI(),
   };
