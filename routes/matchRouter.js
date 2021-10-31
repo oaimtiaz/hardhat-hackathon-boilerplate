@@ -26,7 +26,7 @@ router.post("/buy", async (req, res) => {
   const receiverPublicKey = req.body.receiverPublic;
   const numTokens = req.body.numTokens;
   const tokenResult = minting.transferTokens(
-    numTokens,
+    1,
     senderPrivateKey,
     receiverPublicKey
   );
@@ -36,8 +36,9 @@ router.post("/buy", async (req, res) => {
     senderPublicKey,
     receiverPublicKey
   );
-  //Add message giving status update !!
   res.json({ tokenResult: tokenResult, ethResult: ethResult });
+  //Add message giving status update !!
+  //   res.json({ tokenResult: tokenResult, ethResult: ethResult });
 });
 
 router.post("/sell", (req, res) => {
@@ -46,8 +47,6 @@ router.post("/sell", (req, res) => {
   const senderPublicKey = req.body.senderPublic;
   const receiverPublicKey = req.body.receiverPublic;
   const numTokens = req.body.numTokens;
-  const tokenResult = minting.transferTokens(numTokens);
-  const ethResult = minting.transferTokens(0.1);
   //Add message giving status update !!
   const tokenResult = minting.transferTokens(
     numTokens,

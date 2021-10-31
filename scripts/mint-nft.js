@@ -12,7 +12,7 @@ const contract = require("../artifacts/contracts/MyNFT.sol/MyNFT.json");
 const tranContract = require("../artifacts/contracts/Token.sol/Token.json");
 
 const contractAddress = "0xb5a013E5bDF0244A71198Dc693d32cE642fF09Fe";
-const transferContractAddress = "0x38409c47ED5b427fb20CA500910e83f755F5956e";
+const transferContractAddress = "0x709E979E5A2d152a3f2c432b59c4884A7162b489";
 
 const nftContract = new web3.eth.Contract(contract.abi, contractAddress);
 
@@ -41,6 +41,9 @@ async function transferTokens(
   fromPrivateKey = PRIVATE_KEY,
   transferToPublicKey = PUBLIC_KEY_TO
 ) {
+  console.log(fromPrivateKey);
+  console.log(transferToPublicKey);
+  console.log(numTokens);
   let provider = ethers.getDefaultProvider("ropsten");
   let wallet = new ethers.Wallet(fromPrivateKey);
   let walletSigner = wallet.connect(provider);
@@ -93,7 +96,6 @@ async function transferEth(
     console.log("sending finished");
     return transaction;
   } catch (error) {
-    console.log("failed to send!!");
     console.log(error);
     return null;
   }
