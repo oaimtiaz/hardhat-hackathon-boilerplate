@@ -20,8 +20,13 @@ contract Token {
     // An address type variable is used to store ethereum accounts.
     address public owner;
 
-    // A mapping is a key/value map. Here we store each account balance.
+    // A mapping is a key/value map. Here we store each account balance - amount = # of NFTs
     mapping(address => uint256) balances;
+
+    modifier isOwner() {
+        require(msg.sender == owner, "Message sender is not owner");
+        _;
+    }
 
     /**
      * Contract initialization.
@@ -33,14 +38,15 @@ contract Token {
         // The totalSupply is assigned to transaction sender, which is the account
         // that is deploying the contract.
         balances[msg.sender] = totalSupply;
+        // ether_balances[msg.sender] = 
         owner = msg.sender;
     }
 
-    function mintTokens(uint numTokens, address account) external {
+    function mintTokens(uint numTokens, address account) external isOwner {
         balances[account] += numTokens;
     }
 
-    function getOwner() external view returns(address){
+    function getOwner() external view returns(address) {
         return owner;
     }
 

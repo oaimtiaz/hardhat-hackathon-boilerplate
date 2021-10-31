@@ -12,19 +12,15 @@ const contract = require("../artifacts/contracts/MyNFT.sol/MyNFT.json");
 const tranContract = require("../artifacts/contracts/Token.sol/Token.json");
 
 const contractAddress = "0xb5a013E5bDF0244A71198Dc693d32cE642fF09Fe";
-const transferContractAddress = "0x94f30B09653985d198Eb162905D343A91de47d79";
+const transferContractAddress = "0x38409c47ED5b427fb20CA500910e83f755F5956e";
 
 const nftContract = new web3.eth.Contract(contract.abi, contractAddress);
 
 // Used to add tokens to balances within smart contract for a specific account
-// Mint tokens for a specific account's public key
-async function mintTokens(
-  numTokens,
-  fromPrivateKey = PRIVATE_KEY,
-  toPublicKey = PUBLIC_KEY_TO
-) {
+// Mint tokens for a specific account's public key, using our own original account
+async function mintTokens(numTokens, toPublicKey = PUBLIC_KEY_TO) {
   let provider = ethers.getDefaultProvider("ropsten");
-  let wallet = new ethers.Wallet(fromPrivateKey);
+  let wallet = new ethers.Wallet(PRIVATE_KEY);
   let walletSigner = wallet.connect(provider);
 
   let transferContract = new ethers.Contract(
@@ -57,7 +53,7 @@ async function transferTokens(
   );
 
   let overrides = {
-    gasLimit: 750000,
+    gasLimit: 100000,
   };
 
   // Send tokens
@@ -65,6 +61,39 @@ async function transferTokens(
   transferContract
     .transfer(transferToPublicKey, numTokens, overrides)
     .then((result) => console.log(result));
+}
+
+async function transferEth(
+  amountEth,
+  fromPrivateKey = PRIVATE_KEY,
+  fromPublicKey = PUBLIC_KEY,
+  transferToPublicKey = PUBLIC_KEY_TO
+) {
+  let provider = ethers.getDefaultProvider("ropsten");
+  let wallet = new ethers.Wallet(fromPrivateKey);
+  let walletSigner = wallet.connect(provider);
+
+  const currGasPriceHex = await provider.getGasPrice();
+  let currGasPrice = ethers.utils.hexlify(parseInt(currGasPriceHex));
+
+  const tx = {
+    from: fromPublicKey,
+    to: transferToPublicKey,
+    value: ethers.utils.parseEther(`${amountEth}`),
+    nonce: provider.getTransactionCount(fromPublicKey, "latest"),
+    gasLimit: ethers.utils.hexlify(100000), // 100000
+    gasPrice: currGasPrice,
+  };
+  console.dir(tx);
+
+  try {
+    walletSigner.sendTransaction(tx).then((transaction) => {
+      console.dir(transaction);
+      console.log("sending finished");
+    });
+  } catch (error) {
+    console.log("failed to send!!");
+  }
 }
 
 // Our own account will be used to mint NFTs. No other account should be able to do this right now
@@ -108,8 +137,6 @@ async function mintNFT(tokenURI, publicAccountKey = PUBLIC_KEY) {
     });
 }
 
-// transferTokens(1);
-
 // mintNFT(
 //   "https://gateway.pinata.cloud/ipfs/QmSLKSvWrc9Ma3119LsRxA8Pcj9Sm2jcMn7QWnAxfpVBqe"
 // );
@@ -118,5 +145,5 @@ module.exports = mintTokens;
 module.exports = mintNFT;
 module.exports = transferTokens;
 
+transferEth(0.1);
 // mintTokens(100);
-transferTokens(1);
