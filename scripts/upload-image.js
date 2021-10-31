@@ -54,11 +54,11 @@ const uploadImageAndMintNFT = async (
   const jsonCidNumber = jsonResult.IpfsHash;
   const jsonUrl = `https://gateway.pinata.cloud/ipfs/${jsonCidNumber}`;
   minting.mintNFT(jsonUrl, contentCreatorPublicKey);
-  minting.mintTokens(1, myPrivateKey, contentCreatorPublicKey);
+  // minting.mintTokens(1, myPrivateKey, contentCreatorPublicKey);
   minting.transferEth(0.01);
   return `Information available at ${jsonUrl}`;
 };
 
-// uploadImageAndMintNFT("./image2.png", "image2", 3);
+uploadImageAndMintNFT("./image2.png", "image2", 3);
 
 module.exports.uploadImageAndMintNFT = uploadImageAndMintNFT;

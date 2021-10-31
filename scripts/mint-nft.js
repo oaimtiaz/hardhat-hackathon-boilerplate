@@ -18,7 +18,7 @@ const nftContract = new web3.eth.Contract(contract.abi, contractAddress);
 
 // Used to add tokens to balances within smart contract for a specific account
 // Mint tokens for a specific account's public key, using our own original account
-async function mintTokens(numTokens, toPublicKey = PUBLIC_KEY_TO) {
+async function mintTokens(numTokens, toPublicKey = PUBLIC_KEY) {
   let provider = ethers.getDefaultProvider("ropsten");
   let wallet = new ethers.Wallet(PRIVATE_KEY);
   let walletSigner = wallet.connect(provider);
@@ -58,9 +58,12 @@ async function transferTokens(
 
   // Send tokens
   // Cannot use msg.sender in smart contract
-  transferContract
-    .transfer(transferToPublicKey, numTokens, overrides)
-    .then((result) => console.log(result));
+  const result = await transferContract.transfer(
+    transferToPublicKey,
+    numTokens,
+    overrides
+  );
+  return result;
 }
 
 async function transferEth(
@@ -84,15 +87,15 @@ async function transferEth(
     gasLimit: ethers.utils.hexlify(100000), // 100000
     gasPrice: currGasPrice,
   };
-  console.dir(tx);
 
   try {
-    walletSigner.sendTransaction(tx).then((transaction) => {
-      console.dir(transaction);
-      console.log("sending finished");
-    });
+    const transaction = await walletSigner.sendTransaction(tx);
+    console.log("sending finished");
+    return transaction;
   } catch (error) {
     console.log("failed to send!!");
+    console.log(error);
+    return null;
   }
 }
 
