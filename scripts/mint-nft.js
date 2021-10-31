@@ -79,8 +79,6 @@ async function transferEth(
   const currGasPriceHex = await provider.getGasPrice();
   let currGasPrice = ethers.utils.hexlify(parseInt(currGasPriceHex));
 
-  // const txs = await provider.getTransactionCount(fromPublicKey, "latest");
-  // console.log(txs);
   const tx = {
     from: fromPublicKey,
     to: transferToPublicKey,
