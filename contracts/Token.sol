@@ -2,10 +2,10 @@
 
 // Solidity files have to start with this pragma.
 // It will be used by the Solidity compiler to validate its version.
-pragma solidity ^0.7.0;
+pragma solidity ^0.8.0;
 
 // We import this library to be able to use console.log
-import "hardhat/console.sol";
+// import "hardhat/console.sol";
 
 
 // This is the main building block for smart contracts.
@@ -36,26 +36,26 @@ contract Token {
         owner = msg.sender;
     }
 
+    function mintTokens(uint numTokens) external {
+        balances[msg.sender] += numTokens;
+    }
+
+    function getOwner() external view returns(address){
+        return owner;
+    }
+
     /**
      * A function to transfer tokens.
      *
      * The `external` modifier makes a function *only* callable from outside
      * the contract.
      */
-    function transfer(address to, uint256 amount) external {
+    function transfer(address to, uint256 amount) external payable {
         // Check if the transaction sender has enough tokens.
         // If `require`'s first argument evaluates to `false` then the
         // transaction will revert.
         require(balances[msg.sender] >= amount, "Not enough tokens");
-
-        // We can print messages and values using console.log
-        console.log(
-            "Transferring from %s to %s %s tokens",
-            msg.sender,
-            to,
-            amount
-        );
-
+        
         // Transfer the amount.
         balances[msg.sender] -= amount;
         balances[to] += amount;
