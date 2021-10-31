@@ -141,9 +141,10 @@ async function mintNFT(tokenURI, publicAccountKey = PUBLIC_KEY) {
 //   "https://gateway.pinata.cloud/ipfs/QmSLKSvWrc9Ma3119LsRxA8Pcj9Sm2jcMn7QWnAxfpVBqe"
 // );
 
-module.exports = mintTokens;
-module.exports = mintNFT;
-module.exports = transferTokens;
+module.exports.mintTokens = mintTokens;
+module.exports.mintNFT = mintNFT;
+module.exports.transferTokens = transferTokens;
+module.exports.transferEth = transferEth;
 
-transferEth(0.1);
+// transferEth(0.1);
 // mintTokens(100);

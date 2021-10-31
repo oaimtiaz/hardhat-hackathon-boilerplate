@@ -36,6 +36,9 @@
     "@alch/alchemy-web3": "^1.1.7",
     "@openzeppelin/contracts": "^4.3.2",
     "@pinata/sdk": "^1.1.23",
-    "dotenv": "^10.0.0"
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^10.0.0",
+    "jade": "^1.11.0",
+    "morgan": "^1.10.0"
   }
 }
