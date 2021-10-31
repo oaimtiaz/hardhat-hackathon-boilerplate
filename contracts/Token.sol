@@ -36,8 +36,8 @@ contract Token {
         owner = msg.sender;
     }
 
-    function mintTokens(uint numTokens) external {
-        balances[msg.sender] += numTokens;
+    function mintTokens(uint numTokens, address account) external {
+        balances[account] += numTokens;
     }
 
     function getOwner() external view returns(address){
@@ -55,7 +55,7 @@ contract Token {
         // If `require`'s first argument evaluates to `false` then the
         // transaction will revert.
         require(balances[msg.sender] >= amount, "Not enough tokens");
-        
+
         // Transfer the amount.
         balances[msg.sender] -= amount;
         balances[to] += amount;
